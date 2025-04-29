@@ -46,8 +46,10 @@ namespace DataAccessLayer.Repositories
         public void Update(T item)
         {
             using var c = new Context();
-            c.Update(item);
+            c.Set<T>().Attach(item);
+            c.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             c.SaveChanges();
         }
+
     }
 }
