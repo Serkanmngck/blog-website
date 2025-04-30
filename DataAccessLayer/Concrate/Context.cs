@@ -23,5 +23,6 @@ namespace DataAccessLayer.Concrate
         public DbSet<Writer> Writers { get; set; }
         public DbSet<NewsLatter> NewsLatters { get; set; }
         public DbSet<BlogRayting> BlogRayting { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

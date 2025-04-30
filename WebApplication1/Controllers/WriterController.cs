@@ -5,6 +5,7 @@ using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
@@ -13,10 +14,6 @@ namespace WebApplication1.Controllers
         WriterManager writerManager=new WriterManager(new EfWriterRepository()); 
         [AllowAnonymous]
         public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult test()
         {
             return View();
         }
@@ -70,6 +67,37 @@ namespace WebApplication1.Controllers
 
             return View(writer);  // Hata varsa formu tekrar göster
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult WriterAdd()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult WriterAdd(AddProfileImage tempWriter)
+        {
+            Writer writer = new Writer();
+            if(tempWriter.WriterImage != null)
+            {
+                var extension = Path.GetExtension(tempWriter.WriterImage.FileName);
+                var newImangeName = Guid.NewGuid() + extension;
+                var location=Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/WriterImageFiles/"+ newImangeName);
+                var stream = new FileStream(location,FileMode.Create);
+                tempWriter.WriterImage.CopyTo(stream);
+                writer.WriterImage = newImangeName;
+            }
+            writer.WriterMail=tempWriter.WriterMail;
+            writer.WriterName = tempWriter.WriterName;
+            writer.WriterPassword = tempWriter.WriterPassword;
+            writer.WriterAbout = tempWriter.WriterAbout;
+            writer.WriterStatus = true;
+            writerManager.TAdd(writer);
+
+            return RedirectToAction("Index", "Dashboard");
+        }
+
     }
 
 }

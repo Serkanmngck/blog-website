@@ -38,6 +38,7 @@
   <ItemGroup>
     <Folder Include="Views\Default\" />
     <Folder Include="Views\Home\" />
+    <Folder Include="wwwroot\WriterImageFiles\" />
   </ItemGroup>
 
   <ItemGroup>

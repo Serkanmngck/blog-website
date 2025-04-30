@@ -1,0 +1,75 @@
+﻿@model WebApplication1.Models.AddProfileImage
+@{
+    ViewData["Title"] = "WriterAdd";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+
+<form class="form-group" method="post" enctype="multipart/form-data">
+
+	<div class="col-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Profil Bilgileri</h4>
+
+				@* Tüm doğrulama hataları özet olarak gösterilsin *@
+				@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+				@* WriterID hem görünsün hem gönderilsin *@
+				<div class="form-group">
+					<label>Kullanıcı ID</label>
+					@Html.TextBoxFor(x => x.WriterID, new { @class = "form-control", @readonly = "readonly" })
+					@Html.ValidationMessageFor(x => x.WriterID, "", new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					<label>İsim Soyisim</label>
+					@Html.TextBoxFor(x => x.WriterName, new { @class = "form-control" })
+				</div>
+
+				<div class="form-group">
+					<label>Eposta</label>
+					@Html.TextBoxFor(x => x.WriterMail, new { @class = "form-control" })
+				</div>
+
+				<div class="form-group">
+					<label>Yeni Şifre</label>
+					@Html.Password("WriterPassword", null, new { @class = "form-control", id = "password" })
+				</div>
+
+				<div class="form-group">
+					<label>Şifre Tekrar</label>
+					<input type="password" id="confirmPassword" class="form-control" />
+				</div>
+
+				<div class="form-group">
+					<label>Profil Resmi URL</label>
+					<input type="file" name="WriterImage" class="form-control" >
+				</div>
+
+				<div class="form-group">
+					<label>Hakkında</label>
+					@Html.TextAreaFor(x => x.WriterAbout, 10, 3, new { @class = "form-control" })
+				</div>
+
+				<button type="submit" class="btn btn-gradient-primary mr-2" onclick="return validatePassword()">Kaydet</button>
+				<button type="button" class="btn btn-light">İptal</button>
+			</div>
+		</div>
+	</div>
+	@section Scripts {
+		<script>
+			function validatePassword() {
+				var password = document.getElementById("password").value;
+				var confirmPassword = document.getElementById("confirmPassword").value;
+
+				if (password !== confirmPassword) {
+					alert("Şifreler eşleşmiyor.");
+					return false;
+				}
+				return true;
+			}
+		</script>
+	}
+
+</form>
+
