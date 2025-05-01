@@ -12,7 +12,12 @@ namespace BusinessLayer.Concrete
     public class WriterManager : IWriterService
     {
         IWriterDal _writaldal;
-        public  WriterManager (IWriterDal writerDal)
+        public Writer GetWriterByMail(string mail)
+        {
+            return _writaldal.GetListAll().FirstOrDefault(x => x.WriterMail == mail);
+        }
+
+        public WriterManager (IWriterDal writerDal)
         {
             _writaldal = writerDal;
         }

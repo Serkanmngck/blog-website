@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using BusinessLayer.ValidationRules;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace WebApplication1.Controllers
 {
@@ -31,8 +32,15 @@ namespace WebApplication1.Controllers
         }
         public IActionResult BlogListByWriter()
         {
-            var values = bm.GetListWithCategoryByWirterBM(1);
-            return View(values);
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(userIdClaim, out int writerId))
+            {
+                var values = bm.GetListWithCategoryByWirterBM(writerId);
+                return View(values);
+            }
+
+            return RedirectToAction("Index", "Login"); 
         }
 
         [HttpGet]
@@ -55,9 +63,10 @@ namespace WebApplication1.Controllers
             ValidationResult results = bv.Validate(p);
             if (results.IsValid)
             {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 p.BlogStatus = true;
                 p.BlogCreateDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                p.WriterID = 1;
+                p.WriterID = userId;
                 bm.TAdd(p);
                 return RedirectToAction("BlogListByWriter", "Blog");
             }

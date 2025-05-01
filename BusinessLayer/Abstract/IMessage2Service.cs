@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Abstract
 {
-    public interface IWriterService:IGenericService<Writer>
+    public interface IMessage2Service : IGenericService<Message2>
     {
-        List<Writer> GetWriterById(int id);
-        public Writer GetWriterByMail(string mail);
+        List<Message2> GetInBoxListByWriter(int reciver);
+
     }
 }

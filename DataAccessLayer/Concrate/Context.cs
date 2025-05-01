@@ -14,6 +14,22 @@ namespace DataAccessLayer.Concrate
         {
             optionsBuilder.UseSqlServer("Server = DESKTOP-29APFHS\\SQLEXPRESS; database=CoreBlogDb; integrated security = true;TrustServerCertificate=True;");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Gönderen ilişkisi (WriterSender)
+            modelBuilder.Entity<Message2>()
+                .HasOne(m => m.SenderUser)
+                .WithMany(w => w.WriterSender)
+                .HasForeignKey(m => m.Sender)
+                .OnDelete(DeleteBehavior.ClientSetNull); 
+
+            // Alıcı ilişkisi (WriterReciver)
+            modelBuilder.Entity<Message2>()
+                .HasOne(m => m.ReciverUser)
+                .WithMany(w => w.WriterReciver)
+                .HasForeignKey(m => m.Receiver)
+                .OnDelete(DeleteBehavior.ClientSetNull); 
+        }
 
         public DbSet<About> Abouts { get; set; }
         public DbSet<Blog> Blogs { get; set; }
@@ -25,5 +41,6 @@ namespace DataAccessLayer.Concrate
         public DbSet<BlogRayting> BlogRayting { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Message2> Message2s { get; set; }
     }
 }

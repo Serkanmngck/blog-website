@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Concrate;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -16,29 +17,31 @@ namespace WebApplication1.Controllers
             return View();
         }
         [HttpPost]
-       [AllowAnonymous]
-        public async Task <IActionResult> Index(Writer p)
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(Writer p)
         {
-           Context c = new Context();
-            var datavalue=c.Writers.FirstOrDefault(x=>x.WriterMail == p.WriterMail&& x.WriterPassword==p.WriterPassword);
+            Context c = new Context();
+            var datavalue = c.Writers.FirstOrDefault(x => x.WriterMail == p.WriterMail && x.WriterPassword == p.WriterPassword);
             if (datavalue != null)
             {
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name,p.WriterMail)
-                };
-                var useridentity=new ClaimsIdentity(claims,"a");
+        {
+            new Claim(ClaimTypes.Name, datavalue.WriterMail),
+            new Claim(ClaimTypes.NameIdentifier, datavalue.WriterID.ToString()) // burada ID'yi ekliyoruz
+        };
+
+                var useridentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
-                await HttpContext.SignInAsync(principal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                return RedirectToAction("Index", "Blog");
+                return RedirectToAction("Index", "Dashboard");
             }
-            else 
+            else
             {
-
                 return View();
             }
         }
+
     }
 }
 //Context c = new Context();

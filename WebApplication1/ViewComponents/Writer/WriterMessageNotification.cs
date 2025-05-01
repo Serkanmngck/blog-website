@@ -7,12 +7,11 @@ namespace WebApplication1.ViewComponents.Writer
 {
     public class WriterMessageNotification : ViewComponent
     {
-        MessageManager messageManager = new MessageManager(new EfMessageRepository());
+        Message2Manager messageManager = new Message2Manager(new EfMessage2Repository());
         public IViewComponentResult Invoke()
         {
-            String mail;
-            mail = "serkan@gmail.com";
-            var values = messageManager.GetInBoxListByWriter(mail);
+            int id = 2;
+            var values = messageManager.GetInBoxListByWriter(id);
             return View(values);
         }
     }

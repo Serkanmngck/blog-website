@@ -1,3 +1,7 @@
+using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using DataAccessLayer.Abstract;
+using DataAccessLayer.EntityFramework;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -5,10 +9,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-
-
-builder.Services.AddMvc(config =>
+// Global olarak tüm controller'lara [Authorize] filtresi uygula
+builder.Services.AddControllersWithViews(config =>
 {
     var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
@@ -16,11 +18,17 @@ builder.Services.AddMvc(config =>
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
+// Cookie authentication ayarlarý
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x =>
     {
-        x.LoginPath = "/Login/Index";
+        x.LoginPath = "/Login/Index"; // Giriþ yapýlmadýðýnda yönlendirilecek sayfa
     });
+
+// DI (Dependency Injection) için gerekli servisleri ekleyelim
+builder.Services.AddScoped<IWriterService, WriterManager>();
+builder.Services.AddScoped<IWriterDal, EfWriterRepository>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -35,12 +43,14 @@ app.UseStatusCodePagesWithReExecute("/ErrorPage/Error1", "?code={0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-          
+
 app.UseRouting();
 
-app.UseAuthentication();    
+// Authentication ve Authorization middleware'leri sýrasýyla eklenmeli
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

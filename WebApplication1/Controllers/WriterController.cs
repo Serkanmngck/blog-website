@@ -1,10 +1,12 @@
 ﻿using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
+using DataAccessLayer.Concrate;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -25,16 +27,17 @@ namespace WebApplication1.Controllers
         {
             return PartialView();
         }
-        [AllowAnonymous]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult WriterEditProfile()
         {
-            var values = writerManager.TGetById(1);  // ID 1 ile Writer'ı getir
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var values = writerManager.TGetById(userId);
             return View(values);
         }
+        
 
         // Profil düzenleme (POST) metodu
-        [AllowAnonymous]
         [HttpPost]
         public IActionResult WriterEditProfile(Writer writer)
         {

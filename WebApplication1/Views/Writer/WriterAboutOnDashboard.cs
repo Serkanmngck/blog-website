@@ -1,17 +1,26 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
 
-namespace WebApplication1.Views.Writer
+namespace WebApplication1.ViewComponents.Writer
 {
-
-    public class WriterAboutOnDashboard:ViewComponent
+    public class WriterAboutOnDashboard : ViewComponent
     {
-        WriterManager writerManager=new WriterManager(new EfWriterRepository());
+        private readonly IWriterService _writerService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public WriterAboutOnDashboard(IWriterService writerService, IHttpContextAccessor httpContextAccessor)
+        {
+            _writerService = writerService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         public IViewComponentResult Invoke()
         {
-            var values = writerManager.GetWriterById(1);
-            return View(values);
+            var userMail = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var writer = _writerService.GetWriterByMail(userMail);
+            return View(writer);
         }
     }
 }
