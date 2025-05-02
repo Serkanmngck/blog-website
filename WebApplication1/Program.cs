@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Global olarak tüm controller'lara [Authorize] filtresi uygula
 builder.Services.AddControllersWithViews(config =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -44,13 +43,16 @@ app.UseStatusCodePagesWithReExecute("/ErrorPage/Error1", "?code={0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseRouting();  // Routing aktif et
 
 // Authentication ve Authorization middleware'leri sýrasýyla eklenmeli
 app.UseAuthentication();
 app.UseAuthorization();
 
 // Routing
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
