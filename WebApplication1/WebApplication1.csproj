@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Default\**" />
     <Compile Remove="wwwroot\webwriter\**" />
+    <Content Remove="Views\Default\**" />
     <Content Remove="wwwroot\webwriter\**" />
+    <EmbeddedResource Remove="Views\Default\**" />
     <EmbeddedResource Remove="wwwroot\webwriter\**" />
+    <None Remove="Views\Default\**" />
     <None Remove="wwwroot\webwriter\**" />
   </ItemGroup>
 
@@ -33,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlogApiDemo\BlogApiDemo.csproj" />
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
     <ProjectReference Include="..\EntityLayer\EntityLayer.csproj" />
@@ -42,7 +47,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\Shared\Components\Statistic3\" />
-    <Folder Include="Views\Default\" />
     <Folder Include="wwwroot\WriterImageFiles\" />
   </ItemGroup>
 
