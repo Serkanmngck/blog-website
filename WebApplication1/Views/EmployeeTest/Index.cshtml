@@ -1,9 +1,5 @@
-﻿@using WebApplication1.Controllers
-@model List<Class1>
+﻿@model List<WebApplication1.Controllers.Class1>
 
-@{
-    ViewData["Title"] = "Employee List";
-}
 <table>
     <tr>
         <th>#</th>
@@ -11,7 +7,7 @@
         <th>Sil</th>
         <th>Düzenle</th>
     </tr>
-    @*foreach (var item in Model)
+    @foreach (var item in Model)
     {
         <tr>
             <td>@item.ID</td>
@@ -19,6 +15,5 @@
             <td><a href="#" class="btn btn-outline-danger">Sil</a></td>
             <td><a href="#" class="btn btn-outline-success">Düzenle</a></td>
         </tr>
-    }*@
+    }
 </table>
-<a href="/EmployeeTest/AddEmployee" class="btn btn-outline-primary">Yeni Çalışan Girişi</a>

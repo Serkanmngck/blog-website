@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Concrate
 {
-    public class Context: DbContext
+    public class Context: IdentityDbContext<AppUser>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,7 +29,8 @@ namespace DataAccessLayer.Concrate
                 .HasOne(m => m.ReciverUser)
                 .WithMany(w => w.WriterReciver)
                 .HasForeignKey(m => m.Receiver)
-                .OnDelete(DeleteBehavior.ClientSetNull); 
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<About> Abouts { get; set; }
