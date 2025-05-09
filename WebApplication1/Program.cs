@@ -1,7 +1,9 @@
+using BlogApiDemo.DataAccessLayer;
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -11,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Swagger servislerini ekle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<Context>();
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
 // Add services to the container.
 builder.Services.AddControllersWithViews(config =>
 {
@@ -32,6 +35,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddScoped<IWriterService, WriterManager>();
 builder.Services.AddScoped<IWriterDal, EfWriterRepository>();
 builder.Services.AddHttpContextAccessor();
+
+
 
 var app = builder.Build();
 
