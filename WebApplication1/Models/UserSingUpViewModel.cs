@@ -25,6 +25,5 @@ namespace WebApplication1.Models
         public string UserName { get; set; }
 
 
-
     }
 }
